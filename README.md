@@ -1,9 +1,8 @@
 # Intro
 The gist of this arbitrage is to buy spot and open short such that we get zero risk but at the same time make money through collecting funding payment.
 
-<img width="1434" alt="image" src="https://github.com/user-attachments/assets/293ad4d1-b24d-4757-bce3-f423b27a7549" />
+<img width="1439" alt="image" src="https://github.com/user-attachments/assets/cffa7fc8-a166-45c2-9a20-b5bf2264548f" />
 
-The biggest cost of this arbitrage is trading fee so we spent a lot of time trying to leverage maker fee.
 
 # SpotPerpArb
 
