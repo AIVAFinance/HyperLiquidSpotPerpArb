@@ -8,7 +8,6 @@ class HypeSpotPerpArbitrage:
     """
     This strategy intends to buy spot and short perp to earn funding rate from hyperliquid.
     Under current version, we buy spot and sell spot as a maker, leveraging maker fee.
-    In the next version, we hope to open short and close short as a maker as well.
     Using maker fee wll earn us more profit more quickly.
 
     We check funding_rate every 15 minutes and check account_value every 5 minutes.
