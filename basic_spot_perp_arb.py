@@ -12,6 +12,8 @@ class HypeSpotPerpArbitrage:
     Using maker fee wll earn us more profit more quickly.
 
     We check funding_rate every 15 minutes and check account_value every 5 minutes.
+    If funding_rate turns negative, we close positions.
+    If account_value drops close to maintenance margin, we issue warnings.
     """
     def __init__(self, coin):
         self.wallet, self.info, self.exchange = setup(constants.MAINNET_API_URL, skip_ws=True)
