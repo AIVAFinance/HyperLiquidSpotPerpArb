@@ -1,9 +1,6 @@
 # Intro
 The gist of this arbitrage is to buy spot and open short such that we get zero risk but at the same time make money through collecting funding payment.
 
-<img width="1439" alt="image" src="https://github.com/user-attachments/assets/cffa7fc8-a166-45c2-9a20-b5bf2264548f" />
-
-
 # SpotPerpArb
 
 This is a very rudimentary version of SpotPerpArb on Hyperliquid.
