@@ -1,6 +1,7 @@
 from hyperliquid.utils import constants
 import time
 import threading
+from datetime import datetime
 
 from example_utils import setup, print_json
 
@@ -8,11 +9,10 @@ class HypeSpotPerpArbitrage:
     """
     This strategy intends to buy spot and short perp to earn funding rate from hyperliquid.
     Under current version, we buy spot and sell spot as a maker, leveraging maker fee.
+    In the next version, we hope to open short and close short as a maker as well.
     Using maker fee wll earn us more profit more quickly.
 
     We check funding_rate every 15 minutes and check account_value every 5 minutes.
-    If funding_rate turns negative, we close positions.
-    If account_value drops close to maintenance margin, we issue warnings.
     """
     def __init__(self, coin):
         self.wallet, self.info, self.exchange = setup(constants.MAINNET_API_URL, skip_ws=True)
@@ -465,13 +465,15 @@ class HypeSpotPerpArbitrage:
             return None
 
     def check_funding_rate(self):
-        """Checks the funding rate every half hour and manages positions."""
+        """Checks the funding rate every 15 mins and manages positions."""
         while True:
             try:
                 funding_rate = self.get_funding_rate_by_token(self.coin)
+                now = self._curr_timestamp()
 
                 # Only operate when the funding rate is positive
                 if funding_rate > 0:
+                    print(f"[{now}] Funding rate {funding_rate} is positive.")
                     if not self.is_spot_open and not self.is_perp_open:
                         self.allocation = self.allocate_spot_perp_balance()
                         self.place_spot_limit_order(is_buy=True)
@@ -479,11 +481,11 @@ class HypeSpotPerpArbitrage:
                         self.is_perp_open = True
                         # self.initial_position_value = self.get_position_value()
                     else:
-                        print(f"Orders are open and funding rate {funding_rate} is positive.")
+                        print(f"Orders are already open.")
                 
                 else:
                     if self.is_spot_open and self.is_perp_open:
-                        print(f"Funding rate is {funding_rate}, negative. We close positions.")
+                        print(f"[{now}] Funding rate is {funding_rate}, negative. We close positions.")
                         self.close_positions()
                         self.is_spot_open = False
                         self.is_perp_open = False
@@ -524,6 +526,7 @@ class HypeSpotPerpArbitrage:
             except Exception as e:
                 print(f"Position value check error: {e}")
                 time.sleep(60)
+
 
     def check_account_value(self):
         while True:
@@ -637,7 +640,10 @@ class HypeSpotPerpArbitrage:
         # Define a warning threshold (e.g., account value close to 1.2x maintenance margin)
         warning_threshold = maintenance_margin * 1.2
 
-        print("Checking account status...")
+        # Get the current timestamp
+        current_time = self._curr_timestamp()
+
+        print(f"[{current_time}]Checking account status...")
         print(f"Account Value: {account_value}")
         print(f"Cross Maintenance Margin Used: {maintenance_margin}")
         print(f"Warning Threshold: {warning_threshold}")
@@ -646,13 +652,16 @@ class HypeSpotPerpArbitrage:
         
         # Check if account value is close to or below the threshold
         if account_value <= warning_threshold:
-            print("\n⚠️ Warning: Account value is close to the maintenance margin threshold.")
+            print("f[{current_time}]⚠️ Warning: Account value is close to the maintenance margin threshold.")
             print("Consider reducing your position to avoid liquidation!")
         elif mark_price >= liquidation_price:
-            print("\n⚠️ Warning: The current mark price is close to the liquidation price!")
+            print("f[{current_time}]⚠️ Warning: The current mark price is close to the liquidation price!")
             print("Consider taking action to avoid liquidation!")
         else:
-            print("\n✅ Your account is safe for now.")
+            print("f[{current_time}]✅ Your account is safe for now.\n")
+
+    def _curr_timestamp(self):
+        return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     def run_strategy(self):
         # Run the strategy functions in separate threads to allow parallel execution
@@ -665,7 +674,7 @@ class HypeSpotPerpArbitrage:
 
         # Join the threads to run the strategy until completion
         funding_rate_thread.join()
-        account_value_thread.join()            
+        account_value_thread.join()           
 
 if __name__ == "__main__":
     arbitrage = HypeSpotPerpArbitrage("HYPE")
