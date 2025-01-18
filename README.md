@@ -1,15 +1,21 @@
 # Intro
-The gist of this arbitrage is to buy spot and open short such that we get zero risk but at the same time make money through collecting funding payment.
+The gist of this strategy is to buy spot and open short position in perps such that we get zero risk but still make money by collecting funding payment.
+
+It achieves delta neutrality through the “spot holding + perpetual short” strategy. This approach not only hedges against market price volatility but also allows Aiva Finance to earn stable, risk-free returns from positive funding rates. This strategy is widely used in the digital asset space and is also one of the core methods market makers employ in traditional finance to mitigate price fluctuation risks.
+
+For more info, please visit [Aiva Finance]https://aivafinance.gitbook.io/aivafinance-docs
 
 # SpotPerpArb
 
-This is a very rudimentary version of SpotPerpArb on Hyperliquid.
+This strategy is being actively developed.
 
-To run the program, first install [hyperliquid-python-sdk](https://github.com/hyperliquid-dex/hyperliquid-python-sdk/)
+To run the strategy,
 
-Second, rename "config.json.example" into "config.json".
+1st, install [hyperliquid-python-sdk](https://github.com/hyperliquid-dex/hyperliquid-python-sdk/)
 
-Third, set up an Arbitrum account and put its private key in "secret_key" and account address in "account_address" in the "config.json" file you just renamed above.
+2nd, rename "config.json.example" as "config.json".
+
+3rd, set up an Arbitrum account and put its private key in "secret_key" and account address in "account_address" in the "config.json" file you just renamed above.
 
 Run and go.
 
