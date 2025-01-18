@@ -3,7 +3,7 @@ The gist of this strategy is to buy spot and open short position in perps such t
 
 It achieves delta neutrality through the “spot holding + perpetual short” strategy. This approach not only hedges against market price volatility but also allows Aiva Finance to earn stable, risk-free returns from positive funding rates. This strategy is widely used in the digital asset space and is also one of the core methods market makers employ in traditional finance to mitigate price fluctuation risks.
 
-For more info, please visit [Aiva Finance]https://aivafinance.gitbook.io/aivafinance-docs
+For more info, please visit [Aiva Finance](https://aivafinance.gitbook.io/aivafinance-docs/)
 
 # SpotPerpArb
 
