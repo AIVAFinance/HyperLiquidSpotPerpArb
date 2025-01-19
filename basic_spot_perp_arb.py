@@ -652,13 +652,13 @@ class HypeSpotPerpArbitrage:
         
         # Check if account value is close to or below the threshold
         if account_value <= warning_threshold:
-            print("f[{current_time}]⚠️ Warning: Account value is close to the maintenance margin threshold.")
+            print(f"[{current_time}]⚠️ Warning: Account value is close to the maintenance margin threshold.")
             print("Consider reducing your position to avoid liquidation!")
         elif mark_price >= liquidation_price:
-            print("f[{current_time}]⚠️ Warning: The current mark price is close to the liquidation price!")
+            print(f"[{current_time}]⚠️ Warning: The current mark price is close to the liquidation price!")
             print("Consider taking action to avoid liquidation!")
         else:
-            print("f[{current_time}]✅ Your account is safe for now.\n")
+            print(f"[{current_time}]✅ Your account is safe for now.\n")
 
     def _curr_timestamp(self):
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
