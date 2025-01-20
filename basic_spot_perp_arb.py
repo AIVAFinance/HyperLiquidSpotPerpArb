@@ -28,8 +28,8 @@ class HypeSpotPerpArbitrage:
         self.spot_sz_decimals = self._get_spot_sz_decimals()
         self.perp_sz_decimals = self._get_perp_sz_decimals()
 
-        self.is_spot_open = False
-        self.is_perp_open = False
+        self.is_perp_open = self._check_perp_open()
+        self.is_spot_open = self._check_spot_open()
 
         self.perp_max_decimals = 6
         self.spot_max_decimals = 8
@@ -37,7 +37,32 @@ class HypeSpotPerpArbitrage:
         # The following two attributes are deprecated as is the function check_position_value
         self.initial_position_value = None
         self.position_value_safe_percentage = 0.4
-        
+    
+    def _check_perp_open(self):
+        """
+        Check if there are any open positions in the provided data.
+
+        Parameters:
+        - data (dict): The dictionary containing margin and position data.
+
+        Returns:
+        - bool: True if there are open positions, False otherwise.
+        """
+        data = self.info.user_state(address=self.wallet)
+        # Check if the 'assetPositions' key exists and if it contains any positions
+        if 'assetPositions' in data and len(data['assetPositions']) > 0:
+            # Iterate through the positions to check if they are open
+            for position in data['assetPositions']:
+                if position.get('position')['coin'] == self.coin: 
+                    return True  # There is at least one open position on 'coin'
+        return False  # No open positions found
+    
+    def _check_spot_open(self):
+        '''
+        We assume spot is open if perp is open.
+        '''
+        return self._check_perp_open()
+
     # Function to get USDC(spot) and USDC(perp) balances
     def get_usdc_balances(self):
         """
