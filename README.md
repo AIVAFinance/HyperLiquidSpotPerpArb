@@ -5,9 +5,10 @@ It achieves delta neutrality through the “spot holding + perpetual short” st
 
 For more info, please visit [Aiva Finance](https://aivafinance.gitbook.io/aivafinance-docs/)
 
-# SpotPerpArb
+# ⚠️ Disclaimer
+**Please note that we are NOT responsible for any loss of funds, damages, or other libailities resulting from the use of this software or any associated services.<br> This tool is provided for educational purposes only and should not be used as financial advice. It is still in expiremental phase so use it at your own risk.**
 
-This strategy is being actively developed.
+# SpotPerpArb
 
 To run the strategy,
 
@@ -18,6 +19,8 @@ To run the strategy,
 3rd, set up an Arbitrum account and put its private key in "secret_key" and account address in "account_address" in the "config.json" file you just renamed above.
 
 Run and go.
+
+
 
 # Example Log
 
