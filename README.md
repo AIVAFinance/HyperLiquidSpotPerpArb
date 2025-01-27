@@ -6,7 +6,7 @@ It achieves delta neutrality through the “spot holding + perpetual short” st
 For more info, please visit [Aiva Finance](https://aivafinance.gitbook.io/aivafinance-docs/)
 
 # ⚠️ Disclaimer
-**Please note that we are NOT responsible for any loss of funds, damages, or other libailities resulting from the use of this software or any associated services.This tool is provided for educational purposes only and should not be used as financial advice. It is still in expiremental phase so use it at your own risk.**
+**Please note that we are NOT responsible for any loss of funds, damages, or other libailities resulting from the use of this software or any associated services. This tool is provided for educational purposes only and should not be used as financial advice. It is still in expiremental phase so use it at your own risk.**
 
 # SpotPerpArb
 
@@ -25,3 +25,9 @@ Run and go.
 # Example Log
 
 Check "example_log.txt" to see the log content after program starts running.
+
+
+# Further Considerations
+
+1. Basis, i.e. price difference between SPOT and PERP
+2. Hedge Ratio
