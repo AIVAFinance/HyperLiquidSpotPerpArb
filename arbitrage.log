@@ -1,0 +1,185 @@
+2025-01-31 22:12:28,980 - INFO - Initializing Arbitrage Strategy...
+2025-01-31 22:12:28,980 - INFO - Trading pair: HYPE/USDC
+2025-01-31 22:12:29,214 - INFO - [2025-01-31 22:12:29] Funding rate 1.25e-05 is positive.
+2025-01-31 22:12:29,461 - INFO - Perps not open yet. Waiting for perps to open.
+2025-01-31 22:12:29,576 - INFO - The current usdc_spot is 4248.771567 and usdc_perp is 3008.204456.
+2025-01-31 22:12:30,468 - INFO - Since usdc_spot > usdc_perp, transfer from spot to perp: 
+2025-01-31 22:12:30,883 - INFO - The usdc_spot is 3628.488012 and the usdc_perp is 3628.488011
+2025-01-31 22:12:30,883 - INFO - Allocation complete and successful.
+2025-01-31 22:12:31,982 - INFO - Order status by oid:
+2025-01-31 22:12:32,143 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:32,301 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:32,481 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:32,738 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:33,131 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:33,324 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:33,483 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:33,740 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:33,928 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:34,107 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:34,351 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:34,510 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:34,676 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:34,934 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:35,647 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:35,874 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:36,040 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:36,215 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:36,488 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:36,689 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:36,923 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:37,110 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:37,281 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:37,546 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:37,735 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:37,995 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:38,174 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:38,419 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:38,664 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:38,874 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:39,042 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:39,234 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:39,393 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:39,564 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:39,745 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:39,992 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:40,493 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:40,649 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:40,814 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:41,018 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:41,211 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:41,390 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:41,552 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:41,732 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:41,919 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:42,109 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:42,267 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:42,476 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:42,655 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:42,814 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:42,992 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:43,180 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:43,342 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:43,576 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:43,751 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:43,909 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:44,145 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:44,321 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:44,481 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:44,643 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:44,804 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:44,962 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:45,793 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:45,957 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:46,151 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:46,331 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:46,520 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:46,737 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:46,973 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:47,194 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:47,430 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:47,617 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:47,802 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:48,060 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:48,258 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:48,520 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:48,703 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:48,923 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:49,140 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:49,307 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:49,506 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:49,680 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:49,837 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:49,998 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:50,240 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:50,993 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:51,150 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:51,314 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:51,559 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:51,779 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:51,939 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:52,098 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:52,318 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:52,502 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:52,670 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:52,880 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:53,039 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:53,203 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:53,374 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:53,606 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:53,777 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:53,974 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:54,136 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:54,298 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:54,460 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:54,688 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:54,866 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:55,114 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:55,990 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:56,233 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:56,391 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:56,552 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:56,725 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:56,937 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:57,102 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:57,307 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:57,486 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:57,654 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:57,864 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:58,063 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:58,234 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:58,399 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:58,558 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:58,715 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:58,892 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:59,110 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:59,271 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:59,438 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:59,599 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:12:59,784 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:00,557 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:00,743 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:01,273 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:01,444 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:01,636 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:01,831 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:01,990 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:02,152 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:02,314 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:02,495 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:02,661 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:02,823 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:03,011 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:03,170 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:03,335 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:03,549 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:03,738 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:03,910 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:04,154 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:04,311 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:04,470 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:04,668 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:04,882 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:05,043 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:05,223 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:05,394 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:05,551 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:05,805 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:06,563 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:06,802 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:06,961 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:07,123 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:07,370 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:07,551 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:07,710 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:07,950 - INFO - Waiting for spot buy order to be filled.
+2025-01-31 22:13:08,306 - INFO - There are 132.1 HYPE in the balance.
+2025-01-31 22:13:08,306 - INFO - We are going to open corresponding amount of short position.
+2025-01-31 22:13:09,601 - INFO - Order #67988612862 filled 132.07 @27.4612
+2025-01-31 22:17:30,292 - INFO - [2025-01-31 22:17:30]Checking account status...
+2025-01-31 22:17:30,292 - INFO - Account Value: 3630.154462
+2025-01-31 22:17:30,292 - INFO - Cross Maintenance Margin Used: 603.978121
+2025-01-31 22:17:30,294 - INFO - Warning Threshold: 724.7737452
+2025-01-31 22:17:30,294 - INFO - Liquidation Price: 47.07908053
+2025-01-31 22:17:30,294 - INFO - Mark Price: 27.439
+2025-01-31 22:17:30,294 - INFO - [2025-01-31 22:17:30]✅ Your account is safe for now.
