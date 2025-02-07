@@ -5,6 +5,7 @@ import threading
 from datetime import datetime
 
 from example_utils import setup, print_json
+from PnlCalculator import PnLCalculator
 
 class HypeSpotPerpArbitrage:
     """
@@ -18,14 +19,18 @@ class HypeSpotPerpArbitrage:
     def __init__(self, coin):
         self.wallet, self.info, self.exchange = setup(constants.MAINNET_API_URL, skip_ws=True)
         
-        self.coin = coin
-        self.pair = self.coin + "/USDC"
+        self.coin = coin                  # This is for perp trading
+        self.pair = self.coin + "/USDC"   # This is for spot trading
+
+        self.logger = None
+        self.setup_logger()
+        self.logger.info("Initializing Arbitrage Strategy...")
+        self.logger.info(f"Trading pair: {self.pair}")
 
         self.spot_order_result = None
         self.perp_order_result = None
-        self.slippage = 0.01
+        self.slippage = 0.01    # Used in place_perp_market_order
 
-        # self.allocation = self.allocate_spot_perp_balance()
         self.spot_sz_decimals = self._get_spot_sz_decimals()
         self.perp_sz_decimals = self._get_perp_sz_decimals()
 
@@ -34,19 +39,16 @@ class HypeSpotPerpArbitrage:
 
         self.perp_max_decimals = 6
         self.spot_max_decimals = 8
-        
-        self.logger = None
-        self.setup_logger()
-        self.logger.info("Initializing Arbitrage Strategy...")
-        self.logger.info(f"Trading pair: {self.pair}")
+
+        self.pnl_calculator = PnLCalculator()
 
         # The following two attributes are deprecated as is the function check_position_value
         self.initial_position_value = None
         self.position_value_safe_percentage = 0.4
     
     def setup_logger(self):
-        """Setup logger to log messages to both console and a log file."""
-        log_filename = "arbitrage.log"
+        """Setup logger to log messages to both console and a log file with a timestamp."""
+        log_filename = f"arbitrage_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
         
         logging.basicConfig(
             level=logging.INFO,
@@ -58,7 +60,41 @@ class HypeSpotPerpArbitrage:
         )
         
         self.logger = logging.getLogger(__name__)
+
+
+    def calculate_and_log_total_pnl(self):
+        # Calculate Pnl if positions are closed at the current market price
+        perp_pnl = self.calculate_and_log_perp_pnl()
+        spot_pnl = self.calculate_and_log_spot_pnl()
+        pnl = perp_pnl + spot_pnl
+        self.logger.info(f"Total PnL at market price: {pnl}\n")
     
+    def calculate_and_log_perp_pnl(self):
+        """Calculate and log PnL for the perpetual position."""
+        l2_snapshot = self.info.l2_snapshot(self.coin)
+        user_state = self.info.user_state(address=self.wallet)
+        entry_price, size = self.pnl_calculator.extract_entry_price_and_size(user_state, self.coin)
+        
+        if entry_price is not None and size is not None:
+            pnl_perp_result = self.pnl_calculator.calculate_perp_pnl(l2_snapshot, size, entry_price)
+            self.logger.info(f"[{pnl_perp_result['human']}] Perpetual PnL: {pnl_perp_result['pnl']}")
+        else:
+            self.logger.info(f"No {self.coin} perpetual position found.")
+
+        return float(pnl_perp_result['pnl'])
+
+    def calculate_and_log_spot_pnl(self):
+        """Calculate and log PnL for the spot position."""
+        spot_l2_snapshot = self.info.l2_snapshot(self.pair)
+        accum_result = self.pnl_calculator.get_latest_consecutive_trades(self.info.user_fills(address=self.wallet), "Buy")
+        spot_size = accum_result['total_trade_size']
+        spot_entry_price = accum_result['average_trade_price']
+        
+        pnl_spot_result = self.pnl_calculator.calculate_spot_pnl(spot_l2_snapshot, spot_size, spot_entry_price)
+        self.logger.info(f"[{pnl_spot_result['human']}] Spot PnL: {pnl_spot_result['pnl']}")
+
+        return float(pnl_spot_result['pnl'])
+
     def _check_perp_open(self):
         """
         Check if there are any open positions in the provided data.
@@ -83,7 +119,10 @@ class HypeSpotPerpArbitrage:
         '''
         We assume spot is open if perp is open.
         '''
-        return self._check_perp_open()
+        if self.is_perp_open:
+            self.logger.info(f"Spot position open for {self.coin}.")
+        else:
+            return False
 
     # Function to get USDC(spot) and USDC(perp) balances
     def get_usdc_balances(self):
@@ -107,18 +146,21 @@ class HypeSpotPerpArbitrage:
     # Function to get balance by token_name
     def get_spot_balance_by_token(self, token_name):
         """
-        Get the balance of token_name
-        Return Type is float
+        Get the balance of token_name.
+        Returns a float representing the balance. If the token is not found, returns 0.0.
         """
         data = self.info.spot_user_state(address=self.wallet)
 
-        for balance in data['balances']:
-            if balance['coin'] == token_name:
+        for balance in data.get('balances', []):  # Use `.get()` to avoid KeyError
+            if balance.get('coin') == token_name:
                 try:
-                    return float(balance['total'])
+                    return float(balance.get('total', 0.0))  # Default to 0.0 if 'total' is missing
                 except ValueError:
-                    raise Exception(f"Invalid balance format for {token_name}.")
-        raise Exception(f"Balance for {token_name} not found.")
+                    self.logger.warning(f"Invalid balance format for {token_name}, returning 0.0.")
+                    return 0.0  # Return 0.0 on parsing failure
+        
+        self.logger.info(f"Balance for {token_name} not found, returning 0.0.")  # Log missing balance
+        return 0.0  # Return 0.0 if the token is not found
     
     # Function to get withdrawable amount in USDC(perp)
     def get_withdrawable(self):
@@ -344,6 +386,7 @@ class HypeSpotPerpArbitrage:
         bids = data['levels'][0]  # First list in 'levels' is bids
         return float(bids[level]['px'])
         
+    # Currently, we are NOT using this function to place perp order.  
     def place_perp_limit_order(self, size, price, is_buy=False):
         self.perp_order_result = self.exchange.order(self.coin, is_buy, size, price, {"limit": {"tif": "Gtc"}})
         return self.perp_order_result   
@@ -428,6 +471,7 @@ class HypeSpotPerpArbitrage:
         
         return allocation
 
+    # This function is used in check_positions_value, which is deprecated.
     def get_position_value(self):
         """
         Extracts the position value from the provided data structure.
@@ -493,40 +537,6 @@ class HypeSpotPerpArbitrage:
             self.logger.info(f"Error extracting position_value: {e}")
             self.logger.info(f"Possibly because the system just closed positions. Please wait for 30 minutes.")
             return None
-
-    def check_funding_rate(self):
-        """Checks the funding rate every 15 mins and manages positions."""
-        while True:
-            try:
-                funding_rate = self.get_funding_rate_by_token(self.coin)
-                now = self._curr_timestamp()
-
-                # Only operate when the funding rate is positive
-                if funding_rate > 0:
-                    self.logger.info(f"[{now}] Funding rate {funding_rate} is positive.")
-                    if not self.is_spot_open and not self.is_perp_open:
-                        self.allocation = self.allocate_spot_perp_balance()
-                        self.place_spot_limit_order(is_buy=True)
-                        self.is_spot_open = True
-                        self.place_perp_market_order(is_buy=False)
-                        self.is_perp_open = True
-                        # self.initial_position_value = self.get_position_value()
-                    else:
-                        self.logger.info(f"Orders are already open.")
-                
-                else:
-                    self.logger.info(f"[{now}] Funding rate is {funding_rate}, negative. We close positions.")
-                    if self.is_spot_open and self.is_perp_open:
-                        self.close_positions()
-                        self.is_spot_open = False
-                        self.is_perp_open = False
-
-                # Sleep for 15 minutes before checking the funding rate again
-                time.sleep(15 * 60)
-
-            except Exception as e:
-                print(f"Strategy errs: {e}")
-                time.sleep(60)
     
     # This function is deprecated.
     def check_position_value(self):
@@ -557,6 +567,41 @@ class HypeSpotPerpArbitrage:
             except Exception as e:
                 self.logger.info(f"Position value check error: {e}")
                 time.sleep(60)
+    
+    def check_funding_rate(self):
+        """Checks the funding rate every 15 mins and manages positions."""
+        while True:
+            try:
+                funding_rate = self.get_funding_rate_by_token(self.coin)
+                now = self._curr_timestamp()
+
+                # Only operate when the funding rate is positive
+                if funding_rate > 0:
+                    self.logger.info(f"[{now}] Funding rate {funding_rate} is positive.")
+                    if not self.is_spot_open and not self.is_perp_open:
+                        self.allocation = self.allocate_spot_perp_balance()
+                        self.place_spot_limit_order(is_buy=True)
+                        self.is_spot_open = True
+                        self.place_perp_market_order(is_buy=False)
+                        self.is_perp_open = True
+                    else:
+                        self.logger.info(f"Orders are already open.")
+                
+                else:
+                    self.logger.info(f"[{now}] Funding rate is {funding_rate}, negative.")
+                    if self.is_spot_open and self.is_perp_open:
+                        self.logger.info(f"We close positions.")
+                        self.close_positions()
+                        self.is_spot_open = False
+                        self.is_perp_open = False
+                        self.logger.info(f"Positions closed.")
+
+                # Sleep for 15 minutes before checking the funding rate again
+                time.sleep(15 * 60)
+
+            except Exception as e:
+                print(f"Strategy errs: {e}")
+                time.sleep(60)
 
     def check_account_value(self):
         while True:
@@ -575,9 +620,9 @@ class HypeSpotPerpArbitrage:
                 self.logger.info(f"Account value check error: {e}")
                 time.sleep(60)
 
-    def _extract_relevant_values(self, data):
+    def _extract_relevant_values(self, user_state):
         """
-        Extracts relevant values from the provided data.
+        Extracts relevant values from the provided data，i.e. info.user_state
         
         Parameters:
             data (dict): JSON data containing margin and position details.
@@ -628,6 +673,8 @@ class HypeSpotPerpArbitrage:
             "time": 1736481449739
         }
         """
+        data = user_state
+
         # Extract relevant values
         account_value = float(data["crossMarginSummary"]["accountValue"])
         cross_maintenance_margin_used = float(data["crossMaintenanceMarginUsed"])
@@ -643,7 +690,7 @@ class HypeSpotPerpArbitrage:
             "mark_price": mark_price
         }
 
-    def _check_and_warn(self, values):
+    def _check_and_warn(self, relevant_values):
         """
         Checks if the account value is close to the maintenance margin or the price is near liquidation.
         Generates warnings if necessary.
@@ -652,15 +699,17 @@ class HypeSpotPerpArbitrage:
             values (dict): Dictionary of extracted relevant values.
             
             {
-            "account_value": account_value,
-            "maintenance_margin": cross_maintenance_margin_used,
-            "liquidation_price": liquidation_price,
-            "current_price": current_price
+                "account_value": account_value,
+                "maintenance_margin": cross_maintenance_margin_used,
+                "liquidation_price": liquidation_price,
+                "current_price": current_price
             }
         
         Returns:
             None
         """
+        values = relevant_values
+
         # Unpack values
         account_value = values["account_value"]
         maintenance_margin = values["maintenance_margin"]
@@ -670,7 +719,7 @@ class HypeSpotPerpArbitrage:
         # Define a warning threshold (e.g., account value close to 1.2x maintenance margin)
         warning_threshold = maintenance_margin * 1.2
 
-        # Get the current timestamp
+         # Get the current timestamp
         current_time = self._curr_timestamp()
 
         self.logger.info(f"[{current_time}]Checking account status...")
@@ -689,6 +738,10 @@ class HypeSpotPerpArbitrage:
             self.logger.info("Consider taking action to avoid liquidation!")
         else:
             self.logger.info(f"[{current_time}]✅ Your account is safe for now.\n")
+
+        # Calculate the pnl if we close short and sell spot at the current market price immediately.
+        self.calculate_and_log_total_pnl()
+
 
     def _curr_timestamp(self):
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
