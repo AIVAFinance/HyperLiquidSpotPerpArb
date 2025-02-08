@@ -4,8 +4,18 @@ from hyperliquid.utils import constants
 from datetime import datetime
 
 class PnLCalculator:
+    """
+    PnLCalculator uses the latest Spot and Perp orderbooks from HyperLiquid to
+    calculate the pnl if we close short and sell spots at the market price.
+
+    Closing short uses taker fee, whereas selling spot uses maker fee.
+
+    Trading fee has NOT been taken into consideration.
+    """
     def __init__(self, base_url=constants.MAINNET_API_URL):
         self.address, self.info, self.exchange = setup(base_url=base_url, skip_ws=True)
+        self.taker_fee = 0.000336
+        self.maker_fee = 0.000096
 
     def calculate_perp_pnl(self, l2_snapshot, position_size, entry_price, position_type="short"):
         if position_type not in ["short", "long"]:
@@ -38,9 +48,13 @@ class PnLCalculator:
         avg_execution_price = total_cost / total_executed
         
         if position_type == "short":
-            pnl = (entry_price - avg_execution_price) * position_size
+            pnl_before_fees = (entry_price - avg_execution_price) * position_size
         else:
-            pnl = (avg_execution_price - entry_price) * position_size
+            pnl_before_fees = (avg_execution_price - entry_price) * position_size
+
+        # Apply taker fee to the total cost
+        fee = total_cost * self.taker_fee
+        pnl = pnl_before_fees - fee
 
         timestamp = l2_snapshot['time']
         human_readable_time = datetime.fromtimestamp(timestamp=timestamp/1000).strftime('%Y-%m-%d %H:%M:%S')
@@ -50,6 +64,7 @@ class PnLCalculator:
             "entry_price": entry_price,
             "execution_price": avg_execution_price,
             "position_size": position_size,
+            "fee": fee,
             "pnl": pnl,
             "timestamp": timestamp,
             "human": human_readable_time
@@ -103,7 +118,11 @@ class PnLCalculator:
 
         avg_execution_price = total_revenue / total_executed
         
-        pnl = (avg_execution_price - entry_price) * position_size
+        pnl_before_fee = (avg_execution_price - entry_price) * position_size
+        
+        # Apply taker fee to the total revenue
+        fee = total_revenue * self.maker_fee
+        pnl = pnl_before_fee - fee
 
         timestamp = l2_snapshot['time']
         human_readable_time = datetime.fromtimestamp(timestamp=timestamp/1000).strftime('%Y-%m-%d %H:%M:%S')
@@ -113,6 +132,7 @@ class PnLCalculator:
             "entry_price": entry_price,
             "execution_price": avg_execution_price,
             "position_size": position_size,
+            "fee": fee,
             "pnl": pnl,
             "timestamp": timestamp,
             "human": human_readable_time
