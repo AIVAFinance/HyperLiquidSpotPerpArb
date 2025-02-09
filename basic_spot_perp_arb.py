@@ -4,7 +4,7 @@ import time
 import threading
 from datetime import datetime
 
-from example_utils import setup, print_json
+from example_utils import setup
 from PnlCalculator import PnLCalculator
 
 class HypeSpotPerpArbitrage:
@@ -573,11 +573,10 @@ class HypeSpotPerpArbitrage:
         while True:
             try:
                 funding_rate = self.get_funding_rate_by_token(self.coin)
-                now = self._curr_timestamp()
 
                 # Only operate when the funding rate is positive
                 if funding_rate > 0:
-                    self.logger.info(f"[{now}] Funding rate {funding_rate} is positive.")
+                    self.logger.info(f"Funding rate {funding_rate} is positive.")
                     if not self.is_spot_open and not self.is_perp_open:
                         self.allocation = self.allocate_spot_perp_balance()
                         self.place_spot_limit_order(is_buy=True)
@@ -588,7 +587,7 @@ class HypeSpotPerpArbitrage:
                         self.logger.info(f"Orders are already open.")
                 
                 else:
-                    self.logger.info(f"[{now}] Funding rate is {funding_rate}, negative.")
+                    self.logger.info(f"Funding rate is {funding_rate}, negative.")
                     if self.is_spot_open and self.is_perp_open:
                         self.logger.info(f"We close positions.")
                         self.close_positions()
@@ -606,18 +605,20 @@ class HypeSpotPerpArbitrage:
     def check_account_value(self):
         while True:
             try:
+                self.logger.info("🔍 Running Account Value Check...")  # Heartbeat log
+
                 user_state = self.info.user_state(address=self.wallet)
                 if self.is_perp_open:
                     relevant_values = self._extract_relevant_values(user_state)
                     self._check_and_warn(relevant_values)
                 else:
-                    self.logger.info("Perps not open yet. Waiting for perps to open.")
+                    self.logger.info("ℹ️ Perpetual positions are not open yet. Skipping check.")
 
                 # Sleep for 5 minutes before checking the account value again
                 time.sleep(5 * 60)
 
             except Exception as e:
-                self.logger.info(f"Account value check error: {e}")
+                self.logger.error(f"⚠️ Account value check error: {e}")
                 time.sleep(60)
 
     def _extract_relevant_values(self, user_state):
@@ -719,10 +720,6 @@ class HypeSpotPerpArbitrage:
         # Define a warning threshold (e.g., account value close to 1.2x maintenance margin)
         warning_threshold = maintenance_margin * 1.2
 
-         # Get the current timestamp
-        current_time = self._curr_timestamp()
-
-        self.logger.info(f"[{current_time}]Checking account status...")
         self.logger.info(f"Account Value: {account_value}")
         self.logger.info(f"Cross Maintenance Margin Used: {maintenance_margin}")
         self.logger.info(f"Warning Threshold: {warning_threshold}")
@@ -731,18 +728,18 @@ class HypeSpotPerpArbitrage:
         
         # Check if account value is close to or below the threshold
         if account_value <= warning_threshold:
-            self.logger.info(f"[{current_time}]⚠️ Warning: Account value is close to the maintenance margin threshold.")
+            self.logger.info(f"⚠️ Warning: Account value is close to the maintenance margin threshold.")
             self.logger.info("Consider reducing your position to avoid liquidation!")
         elif mark_price >= liquidation_price:
-            self.logger.info(f"[{current_time}]⚠️ Warning: The current mark price is close to the liquidation price!")
+            self.logger.info(f"⚠️ Warning: The current mark price is close to the liquidation price!")
             self.logger.info("Consider taking action to avoid liquidation!")
         else:
-            self.logger.info(f"[{current_time}]✅ Your account is safe for now.\n")
+            self.logger.info(f"✅ Your account is safe for now.\n")
 
         # Calculate the pnl if we close short and sell spot at the current market price immediately.
         self.calculate_and_log_total_pnl()
 
-
+    # This is currently deprecated with the introduction of Logging
     def _curr_timestamp(self):
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -750,10 +747,15 @@ class HypeSpotPerpArbitrage:
         # Run the strategy functions in separate threads to allow parallel execution
         funding_rate_thread = threading.Thread(target=self.check_funding_rate)
         account_value_thread = threading.Thread(target=self.check_account_value)
-        
+
         # Start the threads
+        self.logger.info("Starting Funding Rate Monitoring Thread...")
+        self.logger.info("Starting Account Value Monitoring Thread...")
+        
         funding_rate_thread.start()
         account_value_thread.start()
+
+        self.logger.info("Both strategy threads have been started successfully.")
 
         # Join the threads to run the strategy until completion
         funding_rate_thread.join()
