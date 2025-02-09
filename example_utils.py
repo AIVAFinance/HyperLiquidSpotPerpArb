@@ -46,6 +46,26 @@ def setup(base_url=None, skip_ws=False):
     exchange = Exchange(account, base_url, account_address=address)
     return address, info, exchange
 
+def setup_fees():
+    """
+    Loads taker_fee and maker_fee from the config.json file.
+    If the fee field is not present, returns default values.
+    """
+    config_path = os.path.join(os.path.dirname(__file__), "config.json")
+    with open(config_path) as f:
+        config = json.load(f)
+    
+    # Default fees
+    default_taker_fee = 0.00035
+    default_maker_fee = 0.0001
+
+    # Get fees from config, or use defaults if not present
+    fee_config = config.get("fee", {})
+    taker_fee = fee_config.get("taker_fee", default_taker_fee)
+    maker_fee = fee_config.get("maker_fee", default_maker_fee)
+
+    return taker_fee, maker_fee
+
 
 def setup_multi_sig_wallets():
     """
