@@ -9,6 +9,10 @@
         You can also populate the "multi_sig" section with the secret keys of the authorized user wallets that you
         wish to sign multi-sig actions for.
     ",
+    "fee": {
+    "taker_fee": 0.00035,
+    "maker_fee": 0.0001
+    },
     "secret_key": "",
     "account_address": "",
     "multi_sig": {
