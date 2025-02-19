@@ -4,8 +4,9 @@ import time
 import threading
 from datetime import datetime
 
-from example_utils import setup
+from example_utils import setup, setup_telegram
 from PnlCalculator import PnLCalculator
+from TelegramNotifier import TelegramNotifier
 
 class HypeSpotPerpArbitrage:
     """
@@ -42,6 +43,13 @@ class HypeSpotPerpArbitrage:
 
         self.pnl_calculator = PnLCalculator()
 
+        telegram_bot_token, telegram_chat_id = setup_telegram()
+        # Initialize TelegramNotifier if bot_token and chat_id are provided
+        if telegram_bot_token and telegram_chat_id:
+            self.telegram_notifier = TelegramNotifier(telegram_bot_token, telegram_chat_id)
+        else:
+            self.telegram_notifier = None
+
         # The following two attributes are deprecated as is the function check_position_value
         self.initial_position_value = None
         self.position_value_safe_percentage = 0.4
@@ -61,13 +69,17 @@ class HypeSpotPerpArbitrage:
         
         self.logger = logging.getLogger(__name__)
 
-
     def calculate_and_log_total_pnl(self):
         # Calculate Pnl if positions are closed at the current market price
         perp_pnl = self.calculate_and_log_perp_pnl()
         spot_pnl = self.calculate_and_log_spot_pnl()
         pnl = perp_pnl + spot_pnl
         self.logger.info(f"Total PnL at market price: {pnl}\n")
+
+        # Send Telegram notification if PnL exceeds the threshold
+        if self.telegram_notifier:
+            message = f"🚨 PnL Alert! Total PnL: ${pnl:.2f}"
+            self.telegram_notifier.send_message(message)
     
     def calculate_and_log_perp_pnl(self):
         """Calculate and log PnL for the perpetual position."""
@@ -573,6 +585,11 @@ class HypeSpotPerpArbitrage:
         while True:
             try:
                 funding_rate = self.get_funding_rate_by_token(self.coin)
+                
+                # Send a Telegram notification about the funding rate
+                if self.telegram_notifier:
+                    message = f"📊 Current funding rate for {self.coin}: {funding_rate}"
+                    self.telegram_notifier.send_message(message)
 
                 # Only operate when the funding rate is positive
                 if funding_rate > 0:
@@ -599,7 +616,10 @@ class HypeSpotPerpArbitrage:
                 time.sleep(15 * 60)
 
             except Exception as e:
-                print(f"Strategy errs: {e}")
+                self.logger.error(f"⚠️ Funding rate check error: {e}")
+                if self.telegram_notifier:
+                    error_message = f"⚠️ Error in funding rate check: {e}"
+                    self.telegram_notifier.send_message(error_message)
                 time.sleep(60)
 
     def check_account_value(self):

@@ -1,32 +1,26 @@
 {
-    "comments": "
-        Make a copy of this file and save to `config.json`
-        Fill in your secret key e.g. 0x0000000000000000000000000000000000000000000000000000000000000000
-        If you are using an Agent/API Wallet you MUST also specify the public address of your account, not the
-        address of the Agent/API Wallet.
-        Otherwise, feel free to leave it blank and it will be automatically derived from the secret key.
-
-        You can also populate the "multi_sig" section with the secret keys of the authorized user wallets that you
-        wish to sign multi-sig actions for.
-    ",
-    "fee": {
-    "taker_fee": 0.00035,
-    "maker_fee": 0.0001
-    },
-    "secret_key": "",
-    "account_address": "",
-    "multi_sig": {
-        "authorized_users": [
-            {
-                "comment": "signer 1",
-                "secret_key": "",
-                "account_address": ""
-            },
-            {
-                "comment": "signer 2",
-                "secret_key": "",
-                "account_address": ""
-            }
-        ]
-    }
+  "secret_key": "0x2cba02b7e828beb1e5191fa2be979a8162f3d5ded6ebb8a0956da20f228fc3ed",
+  "account_address": "0x055d51f27c13793a195ca2fccaf7b9dfee377f0a",
+  "telegram": {
+    "bot_token": "",
+    "chat_id": ""
+  },
+  "fee": {
+    "taker_fee": 0.000336,
+    "maker_fee": 0.000096
+  },
+  "multi_sig": {
+    "authorized_users": [
+      {
+        "comment": "signer 1",
+        "secret_key": "",
+        "account_address": ""
+      },
+      {
+        "comment": "signer 2",
+        "secret_key": "",
+        "account_address": ""
+      }
+    ]
+  }
 }
