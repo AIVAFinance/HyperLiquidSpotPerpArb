@@ -1,6 +1,6 @@
 {
-  "secret_key": "0x2cba02b7e828beb1e5191fa2be979a8162f3d5ded6ebb8a0956da20f228fc3ed",
-  "account_address": "0x055d51f27c13793a195ca2fccaf7b9dfee377f0a",
+  "secret_key": "",
+  "account_address": "",
   "telegram": {
     "bot_token": "",
     "chat_id": ""
