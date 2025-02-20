@@ -1,0 +1,26 @@
+{
+  "secret_key": "",
+  "account_address": "",
+  "telegram": {
+    "bot_token": "",
+    "chat_id": ""
+  },
+  "fee": {
+    "taker_fee": 0.000336,
+    "maker_fee": 0.000096
+  },
+  "multi_sig": {
+    "authorized_users": [
+      {
+        "comment": "signer 1",
+        "secret_key": "",
+        "account_address": ""
+      },
+      {
+        "comment": "signer 2",
+        "secret_key": "",
+        "account_address": ""
+      }
+    ]
+  }
+}
